@@ -17,7 +17,16 @@ namespace FazendaBackEnd.Controllers
         [HttpGet]
         public ActionResult<List<Cultura>> GetAll()
         {
-            return _context.Cultura.ToList();
+            var culturas = _context.Cultura.ToList();
+
+            foreach (var cultura in culturas)
+            {
+                cultura.Tbasal = (double)cultura.Tbasal;
+                cultura.Tmax = (double)cultura.Tmax;
+                cultura.Tmin = (double)cultura.Tmin;
+            }
+
+            return culturas;
         }
     }
 }
