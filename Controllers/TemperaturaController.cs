@@ -39,7 +39,7 @@ namespace FazendaBackEnd.Controllers
             }
         }
 
-        [HttpPost("add-Temperatura")]
+        [HttpPost("add-temperatura")]
         public async Task<ActionResult> Post(Temperatura model)
         {
             try
@@ -96,9 +96,10 @@ namespace FazendaBackEnd.Controllers
                 result.data = dadosTemperaturaAlt.data;
                 result.Tmax = dadosTemperaturaAlt.Tmax;
                 result.Tmin = dadosTemperaturaAlt.Tmin;
-                result.sensorid = dadosTemperaturaAlt.sensorid;
+                result.sensorId = dadosTemperaturaAlt.sensorId;
+                result.culturaId = dadosTemperaturaAlt.culturaId;
                 await _context.SaveChangesAsync();
-                return Created($"/api/fazenda/Temperatura/{dadosTemperaturaAlt.id}", dadosTemperaturaAlt);
+                return Created($"/api/fazenda/temperatura/{dadosTemperaturaAlt.id}", dadosTemperaturaAlt);
             }
             catch
             {
