@@ -167,3 +167,4 @@ C:\Users\Marcelo\vcode-workspace\FazendaBackEnd\obj\Debug\net6.0\refint\FazendaB
 C:\Users\Marcelo\vcode-workspace\FazendaBackEnd\obj\Debug\net6.0\FazendaBackEnd.pdb
 C:\Users\Marcelo\vcode-workspace\FazendaBackEnd\obj\Debug\net6.0\FazendaBackEnd.genruntimeconfig.cache
 C:\Users\Marcelo\vcode-workspace\FazendaBackEnd\obj\Debug\net6.0\ref\FazendaBackEnd.dll
+C:\Users\Marcelo\vcode-workspace\FazendaBackEnd\bin\Debug\net6.0\Newtonsoft.Json.dll
