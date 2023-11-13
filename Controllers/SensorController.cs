@@ -4,29 +4,29 @@ using FazendaBackEnd_MySQL.Data;
 
 namespace FazendaBackEnd.Controllers
 {
-    [Route("api/fazenda")]
+    [Route("api/fazenda/sensor")]
     [ApiController]
-    public class FazendaController : ControllerBase
+    public class SensorController : ControllerBase
     {
         private FazendaContext _context;
-        public FazendaController(FazendaContext context)
+        public SensorController(FazendaContext context)
         {
             // construtor
             _context = context;
         }
         [HttpGet("getAll")]
-        public ActionResult<List<Cultura>> GetAll()
+        public ActionResult<List<Sensor>> GetAll()
         {
-            return _context.Cultura.ToList();
+            return _context.Sensor.ToList();
 
         }
 
-        [HttpGet("{CulturaId}")]
-        public ActionResult<Cultura> Get(int CulturaId)
+        [HttpGet("{SensorId}")]
+        public ActionResult<Sensor> Get(int SensorId)
         {
             try
             {
-                var result = _context.Cultura.Find(CulturaId);
+                var result = _context.Sensor.Find(SensorId);
                 if (result == null)
                 {
                     return NotFound();
@@ -39,16 +39,16 @@ namespace FazendaBackEnd.Controllers
             }
         }
 
-        [HttpPost("add-culture")]
-        public async Task<ActionResult> Post(Cultura model)
+        [HttpPost("add-sensor")]
+        public async Task<ActionResult> Post(Sensor model)
         {
             try
             {
-                _context.Cultura.Add(model);
+                _context.Sensor.Add(model);
                 if (await _context.SaveChangesAsync() == 1)
                 {
                     //return Ok();
-                    return Created($"/api/fazenda/{model.id}", model);
+                    return Created($"/api/fazenda/sensor/{model.id}", model);
                 }
             }
             catch
@@ -59,19 +59,19 @@ namespace FazendaBackEnd.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{CulturaId}")]
-        public async Task<ActionResult> Delete(int CulturaId)
+        [HttpDelete("{SensorId}")]
+        public async Task<ActionResult> Delete(int SensorId)
         {
             try
             {
-                //verifica se existe cultura a ser excluída
-                var cultura = await _context.Cultura.FindAsync(CulturaId);
-                if (cultura == null)
+                //verifica se existe Sensor a ser excluída
+                var Sensor = await _context.Sensor.FindAsync(SensorId);
+                if (Sensor == null)
                 {
                     //método do EF
                     return NotFound();
                 }
-                _context.Remove(cultura);
+                _context.Remove(Sensor);
                 await _context.SaveChangesAsync();
                 return NoContent();
             }
@@ -81,24 +81,21 @@ namespace FazendaBackEnd.Controllers
             }
         }
 
-        [HttpPut("{CulturaId}")]
-        public async Task<IActionResult> Put(int CulturaId, Cultura dadosCulturaAlt)
+        [HttpPut("{SensorId}")]
+        public async Task<IActionResult> Put(int SensorId, Sensor dadosSensorAlt)
         {
             try
             {
-                //verifica se existe cultura a ser alterado
-                var result = await _context.Cultura.FindAsync(CulturaId);
-                if (CulturaId != result.id)
+                //verifica se existe Sensor a ser alterado
+                var result = await _context.Sensor.FindAsync(SensorId);
+                if (SensorId != result.id)
                 {
                     return BadRequest();
                 }
-                result.id = dadosCulturaAlt.id;
-                result.nome = dadosCulturaAlt.nome;
-                result.GD = dadosCulturaAlt.GD;
-                result.SGD = dadosCulturaAlt.SGD;
-                result.sensorId = dadosCulturaAlt.sensorId;
+                result.id = dadosSensorAlt.id;
+                result.descricao = dadosSensorAlt.descricao; ;
                 await _context.SaveChangesAsync();
-                return Created($"/api/fazenda/{dadosCulturaAlt.id}", dadosCulturaAlt);
+                return Created($"/api/fazenda/sensor/{dadosSensorAlt.id}", dadosSensorAlt);
             }
             catch
             {

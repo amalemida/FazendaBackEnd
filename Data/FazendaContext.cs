@@ -14,5 +14,8 @@ namespace FazendaBackEnd_MySQL.Data
             options.UseSqlServer(Configuration.GetConnectionString("StringConexaoSQLServer"));
         }
         public DbSet<Cultura>? Cultura { get; set; }
+        public DbSet<Sensor>? Sensor { get; set; }
+        public DbSet<Temperatura>? Temperatura { get; set; }
+
     }
 }

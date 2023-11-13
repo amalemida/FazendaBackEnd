@@ -4,29 +4,29 @@ using FazendaBackEnd_MySQL.Data;
 
 namespace FazendaBackEnd.Controllers
 {
-    [Route("api/fazenda")]
+    [Route("api/fazenda/temperatura")]
     [ApiController]
-    public class FazendaController : ControllerBase
+    public class TemperaturaController : ControllerBase
     {
         private FazendaContext _context;
-        public FazendaController(FazendaContext context)
+        public TemperaturaController(FazendaContext context)
         {
             // construtor
             _context = context;
         }
         [HttpGet("getAll")]
-        public ActionResult<List<Cultura>> GetAll()
+        public ActionResult<List<Temperatura>> GetAll()
         {
-            return _context.Cultura.ToList();
+            return _context.Temperatura.ToList();
 
         }
 
-        [HttpGet("{CulturaId}")]
-        public ActionResult<Cultura> Get(int CulturaId)
+        [HttpGet("{TemperaturaId}")]
+        public ActionResult<Temperatura> Get(int TemperaturaId)
         {
             try
             {
-                var result = _context.Cultura.Find(CulturaId);
+                var result = _context.Temperatura.Find(TemperaturaId);
                 if (result == null)
                 {
                     return NotFound();
@@ -39,16 +39,16 @@ namespace FazendaBackEnd.Controllers
             }
         }
 
-        [HttpPost("add-culture")]
-        public async Task<ActionResult> Post(Cultura model)
+        [HttpPost("add-Temperatura")]
+        public async Task<ActionResult> Post(Temperatura model)
         {
             try
             {
-                _context.Cultura.Add(model);
+                _context.Temperatura.Add(model);
                 if (await _context.SaveChangesAsync() == 1)
                 {
                     //return Ok();
-                    return Created($"/api/fazenda/{model.id}", model);
+                    return Created($"/api/fazenda/Temperatura/{model.id}", model);
                 }
             }
             catch
@@ -59,19 +59,19 @@ namespace FazendaBackEnd.Controllers
             return BadRequest();
         }
 
-        [HttpDelete("{CulturaId}")]
-        public async Task<ActionResult> Delete(int CulturaId)
+        [HttpDelete("{TemperaturaId}")]
+        public async Task<ActionResult> Delete(int TemperaturaId)
         {
             try
             {
-                //verifica se existe cultura a ser excluída
-                var cultura = await _context.Cultura.FindAsync(CulturaId);
-                if (cultura == null)
+                //verifica se existe Temperatura a ser excluída
+                var Temperatura = await _context.Temperatura.FindAsync(TemperaturaId);
+                if (Temperatura == null)
                 {
                     //método do EF
                     return NotFound();
                 }
-                _context.Remove(cultura);
+                _context.Remove(Temperatura);
                 await _context.SaveChangesAsync();
                 return NoContent();
             }
@@ -81,24 +81,24 @@ namespace FazendaBackEnd.Controllers
             }
         }
 
-        [HttpPut("{CulturaId}")]
-        public async Task<IActionResult> Put(int CulturaId, Cultura dadosCulturaAlt)
+        [HttpPut("{TemperaturaId}")]
+        public async Task<IActionResult> Put(int TemperaturaId, Temperatura dadosTemperaturaAlt)
         {
             try
             {
-                //verifica se existe cultura a ser alterado
-                var result = await _context.Cultura.FindAsync(CulturaId);
-                if (CulturaId != result.id)
+                //verifica se existe Temperatura a ser alterado
+                var result = await _context.Temperatura.FindAsync(TemperaturaId);
+                if (TemperaturaId != result.id)
                 {
                     return BadRequest();
                 }
-                result.id = dadosCulturaAlt.id;
-                result.nome = dadosCulturaAlt.nome;
-                result.GD = dadosCulturaAlt.GD;
-                result.SGD = dadosCulturaAlt.SGD;
-                result.sensorId = dadosCulturaAlt.sensorId;
+                result.id = dadosTemperaturaAlt.id;
+                result.data = dadosTemperaturaAlt.data;
+                result.Tmax = dadosTemperaturaAlt.Tmax;
+                result.Tmin = dadosTemperaturaAlt.Tmin;
+                result.sensorid = dadosTemperaturaAlt.sensorid;
                 await _context.SaveChangesAsync();
-                return Created($"/api/fazenda/{dadosCulturaAlt.id}", dadosCulturaAlt);
+                return Created($"/api/fazenda/Temperatura/{dadosTemperaturaAlt.id}", dadosTemperaturaAlt);
             }
             catch
             {
