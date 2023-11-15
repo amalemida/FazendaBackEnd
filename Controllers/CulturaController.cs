@@ -4,21 +4,20 @@ using FazendaBackEnd_MySQL.Data;
 
 namespace FazendaBackEnd.Controllers
 {
-    [Route("api/fazenda")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class FazendaController : ControllerBase
+    public class CulturaController : ControllerBase
     {
         private FazendaContext _context;
-        public FazendaController(FazendaContext context)
+        public CulturaController(FazendaContext context)
         {
             // construtor
             _context = context;
         }
-        [HttpGet("getAll")]
+        [HttpGet]
         public ActionResult<List<Cultura>> GetAll()
         {
             return _context.Cultura.ToList();
-
         }
 
         [HttpGet("{CulturaId}")]
@@ -39,7 +38,25 @@ namespace FazendaBackEnd.Controllers
             }
         }
 
-        [HttpPost("add-culture")]
+         [HttpGet("{CulturaId}/Temperatura")]
+        public ActionResult<Cultura> GetTemperatura(int CulturaId)
+        {
+            try
+            {
+                var result = _context.Temperatura.Where(t=> t.culturaId == CulturaId);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
+            }
+            catch
+            {
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Falha no acesso ao banco de dados.");
+            }
+        }
+
+        [HttpPost]
         public async Task<ActionResult> Post(Cultura model)
         {
             try
@@ -48,7 +65,7 @@ namespace FazendaBackEnd.Controllers
                 if (await _context.SaveChangesAsync() == 1)
                 {
                     //return Ok();
-                    return Created($"/api/fazenda/{model.id}", model);
+                    return Created($"/api/Cultura/{model.id}", model);
                 }
             }
             catch
@@ -98,7 +115,7 @@ namespace FazendaBackEnd.Controllers
                 result.SGD = dadosCulturaAlt.SGD;
                 result.sensorId = dadosCulturaAlt.sensorId;
                 await _context.SaveChangesAsync();
-                return Created($"/api/fazenda/{dadosCulturaAlt.id}", dadosCulturaAlt);
+                return Created($"/api/Cultura/{dadosCulturaAlt.id}", dadosCulturaAlt);
             }
             catch
             {

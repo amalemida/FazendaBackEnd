@@ -4,7 +4,7 @@ using FazendaBackEnd_MySQL.Data;
 
 namespace FazendaBackEnd.Controllers
 {
-    [Route("api/fazenda/temperatura")]
+    [Route("api/[controller]")]
     [ApiController]
     public class TemperaturaController : ControllerBase
     {
@@ -14,7 +14,7 @@ namespace FazendaBackEnd.Controllers
             // construtor
             _context = context;
         }
-        [HttpGet("getAll")]
+        [HttpGet]
         public ActionResult<List<Temperatura>> GetAll()
         {
             return _context.Temperatura.ToList();
@@ -39,7 +39,7 @@ namespace FazendaBackEnd.Controllers
             }
         }
 
-        [HttpPost("add-temperatura")]
+        [HttpPost]
         public async Task<ActionResult> Post(Temperatura model)
         {
             try
@@ -47,8 +47,14 @@ namespace FazendaBackEnd.Controllers
                 _context.Temperatura.Add(model);
                 if (await _context.SaveChangesAsync() == 1)
                 {
-                    //return Ok();
-                    return Created($"/api/fazenda/Temperatura/{model.id}", model);
+                    var cultura = await _context.Cultura.FindAsync(model.culturaId);
+                    var media = (model.Tmax - model.Tmin)/2; 
+                    var gd = media - cultura.Tbasal;
+
+                    cultura.SGD = cultura.SGD + gd;
+                    await _context.SaveChangesAsync();
+
+                    return Created($"/api/Temperatura/{model.id}", model);
                 }
             }
             catch
@@ -96,10 +102,9 @@ namespace FazendaBackEnd.Controllers
                 result.data = dadosTemperaturaAlt.data;
                 result.Tmax = dadosTemperaturaAlt.Tmax;
                 result.Tmin = dadosTemperaturaAlt.Tmin;
-                result.sensorId = dadosTemperaturaAlt.sensorId;
                 result.culturaId = dadosTemperaturaAlt.culturaId;
                 await _context.SaveChangesAsync();
-                return Created($"/api/fazenda/temperatura/{dadosTemperaturaAlt.id}", dadosTemperaturaAlt);
+                return Created($"/api/Temperatura/{dadosTemperaturaAlt.id}", dadosTemperaturaAlt);
             }
             catch
             {

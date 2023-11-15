@@ -4,7 +4,7 @@ using FazendaBackEnd_MySQL.Data;
 
 namespace FazendaBackEnd.Controllers
 {
-    [Route("api/fazenda/sensor")]
+    [Route("api/[controller]")]
     [ApiController]
     public class SensorController : ControllerBase
     {
@@ -14,7 +14,7 @@ namespace FazendaBackEnd.Controllers
             // construtor
             _context = context;
         }
-        [HttpGet("getAll")]
+        [HttpGet]
         public ActionResult<List<Sensor>> GetAll()
         {
             return _context.Sensor.ToList();
@@ -39,7 +39,7 @@ namespace FazendaBackEnd.Controllers
             }
         }
 
-        [HttpPost("add-sensor")]
+        [HttpPost]
         public async Task<ActionResult> Post(Sensor model)
         {
             try
@@ -48,7 +48,7 @@ namespace FazendaBackEnd.Controllers
                 if (await _context.SaveChangesAsync() == 1)
                 {
                     //return Ok();
-                    return Created($"/api/fazenda/sensor/{model.id}", model);
+                    return Created($"/api/Sensor/{model.id}", model);
                 }
             }
             catch
@@ -95,7 +95,7 @@ namespace FazendaBackEnd.Controllers
                 result.id = dadosSensorAlt.id;
                 result.descricao = dadosSensorAlt.descricao; ;
                 await _context.SaveChangesAsync();
-                return Created($"/api/fazenda/sensor/{dadosSensorAlt.id}", dadosSensorAlt);
+                return Created($"/api/Sensor/{dadosSensorAlt.id}", dadosSensorAlt);
             }
             catch
             {
